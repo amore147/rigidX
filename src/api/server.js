@@ -13,6 +13,19 @@ app.post("/api/chat", async (req, res) => {
   try {
     const { message, history = [] } = req.body;
 
+    if (!message?.trim()) {
+      return res.status(400).json({
+        error: "Message is required",
+      });
+    }
+
+    if (!process.env.GROQ_API_KEY) {
+      console.error("GROQ_API_KEY is missing");
+      return res.status(500).json({
+        error: "Server configuration error",
+      });
+    }
+
     const messages = [
       {
         role: "system",
@@ -38,40 +51,54 @@ Talk casually like a normal person texting.
 
       {
         role: "user",
-        content: message,
+        content: message.trim(),
       },
     ];
 
-    const response = await fetch("https://ollama.com/api/chat", {
-      method: "POST",
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
 
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
-      },
-
-      body: JSON.stringify({
-        model: "glm-5.3-flash:cloud",
-        messages,
-        think: false,
-        stream: false,
-        options: {
-          temperature: 0.8,
-          num_predict: 50,
-          num_ctx: 2048,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
-      }),
-    });
+
+        body: JSON.stringify({
+          model: "openai/gpt-oss-20b",
+          messages,
+          temperature: 0.8,
+          max_tokens: 50,
+          include_reasoning: false,
+        }),
+      },
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`Ollama error: ${response.status} - ${errorText}`);
+
+      console.error(`Groq error: ${response.status} - ${errorText}`);
+
+      return res.status(502).json({
+        error: "AI provider error",
+      });
     }
 
     const data = await response.json();
 
+    const reply = data?.choices?.[0]?.message?.content?.trim();
+
+    if (!reply) {
+      console.error("Invalid Groq response:", data);
+
+      return res.status(502).json({
+        error: "Empty AI response",
+      });
+    }
+
     res.json({
-      reply: data.message.content.trim(),
+      reply,
     });
   } catch (error) {
     console.error("Chat error:", error);

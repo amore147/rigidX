@@ -51,7 +51,7 @@ Talk casually like a normal person texting.
       },
 
       body: JSON.stringify({
-        model: "qwen3:8b",
+        model: "glm-5.3-flash:cloud",
         messages,
         think: false,
         stream: false,

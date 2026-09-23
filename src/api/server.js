@@ -21,6 +21,7 @@ app.post("/api/chat", async (req, res) => {
 
     if (!process.env.GROQ_API_KEY) {
       console.error("GROQ_API_KEY is missing");
+
       return res.status(500).json({
         error: "Server configuration error",
       });
@@ -69,9 +70,11 @@ Talk casually like a normal person texting.
           model: "openai/gpt-oss-20b",
           messages,
           temperature: 0.8,
-          max_tokens: 50,
-          include_reasoning: false,
+          max_tokens: 150,
+          reasoning_effort: "low",
         }),
+
+        signal: AbortSignal.timeout(30000),
       },
     );
 
@@ -90,7 +93,7 @@ Talk casually like a normal person texting.
     const reply = data?.choices?.[0]?.message?.content?.trim();
 
     if (!reply) {
-      console.error("Invalid Groq response:", data);
+      console.error("Empty Groq response:", data);
 
       return res.status(502).json({
         error: "Empty AI response",
@@ -102,6 +105,12 @@ Talk casually like a normal person texting.
     });
   } catch (error) {
     console.error("Chat error:", error);
+
+    if (error.name === "TimeoutError") {
+      return res.status(504).json({
+        error: "AI request timed out",
+      });
+    }
 
     res.status(500).json({
       error: "Failed to get response",

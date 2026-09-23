@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { themes } from "../service/theme";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const ChatPage = ({ onLeave }) => {
   // =============================
@@ -30,16 +31,9 @@ const ChatPage = ({ onLeave }) => {
   ]);
 
   const [input, setInput] = useState("");
-
   const [loading, setLoading] = useState(false);
-
   const [skipConfirm, setSkipConfirm] = useState(false);
-
   const [finding, setFinding] = useState(false);
-
-  // =============================
-  // Input reference
-  // =============================
 
   const inputRef = useRef(null);
 
@@ -64,19 +58,14 @@ const ChatPage = ({ onLeave }) => {
       const isTyping =
         e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA";
 
-      // "/" → focus input
       if (e.key === "/" && !isTyping) {
         e.preventDefault();
-
         inputRef.current?.focus();
-
         return;
       }
 
-      // Escape → close chat
       if (e.key === "Escape") {
         setSkipConfirm(false);
-
         onLeave();
       }
     };
@@ -109,34 +98,33 @@ const ChatPage = ({ onLeave }) => {
 
     const history = messages.map((msg) => ({
       role: msg.sender === "you" ? "user" : "assistant",
-
       content: msg.text,
     }));
 
     setMessages((prev) => [...prev, newUserMessage]);
-
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/chat", {
+      const response = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
           message: userMessage,
-
           history,
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get response");
+        throw new Error(`API error: ${response.status}`);
       }
 
       const data = await response.json();
+
+      if (!data.reply) {
+        throw new Error("Invalid API response");
+      }
 
       // Small natural delay
       await new Promise((resolve) =>
@@ -145,7 +133,6 @@ const ChatPage = ({ onLeave }) => {
 
       setMessages((prev) => [
         ...prev,
-
         {
           id: Date.now() + 1,
           sender: "stranger",
@@ -153,11 +140,10 @@ const ChatPage = ({ onLeave }) => {
         },
       ]);
     } catch (error) {
-      console.error(error);
+      console.error("Chat error:", error);
 
       setMessages((prev) => [
         ...prev,
-
         {
           id: Date.now() + 1,
           sender: "stranger",
@@ -179,11 +165,8 @@ const ChatPage = ({ onLeave }) => {
 
   const skipStranger = async () => {
     setSkipConfirm(false);
-
     setLoading(false);
-
     setInput("");
-
     setFinding(true);
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -208,50 +191,31 @@ const ChatPage = ({ onLeave }) => {
   // =============================
 
   return (
-    /*
-     * Outer layer:
-     * transparent — landing remains visible
-     */
-    <div
-      className="
-        fixed
-        inset-0
-        z-50
-        flex
-        items-center
-        justify-center
-        p-6
-        pointer-events-none
-      "
-    >
-      {/* ================================= */}
-      {/* Floating application window */}
-      {/* ================================= */}
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-6 pointer-events-none">
       <div
         className="
-          pointer-events-auto
-          relative
-          w-full
-          max-w-[1150px]
-          h-[84vh]
-          min-h-[600px]
-          rounded-[20px]
-          overflow-hidden
-          border
-          flex
-          shadow-[0_30px_100px_rgba(0,0,0,0.45)]
-          animate-[chatWindow_.35s_ease-out]
-        "
+            pointer-events-auto
+            relative
+            w-full
+            max-w-[1150px]
+            h-screen
+            sm:h-[84vh]
+            min-h-0
+            sm:min-h-[600px]
+            rounded-none
+            sm:rounded-[20px]
+            overflow-hidden
+            border
+            flex
+            shadow-[0_30px_100px_rgba(0,0,0,0.45)] 
+            animate-[chatWindow_.35s_ease-out]
+            "
         style={{
           background: theme.background,
-
           borderColor: theme.border,
         }}
       >
-        {/* ============================= */}
         {/* Ambient glow */}
-        {/* ============================= */}
 
         <div
           className="
@@ -277,21 +241,19 @@ const ChatPage = ({ onLeave }) => {
           className="
             relative
             z-10
+            hidden
+            sm:flex
             w-[220px]
             shrink-0
             h-full
             border-r
-            flex
             flex-col
-          "
+            " 
           style={{
             background: theme.sidebar,
-
             borderColor: theme.border,
           }}
         >
-          {/* Chat */}
-
           <div className="px-4 pt-5">
             <button
               className="
@@ -306,7 +268,6 @@ const ChatPage = ({ onLeave }) => {
               "
               style={{
                 background: `${theme.accent}18`,
-
                 color: theme.accentHover,
               }}
             >
@@ -314,8 +275,6 @@ const ChatPage = ({ onLeave }) => {
               Chat
             </button>
           </div>
-
-          {/* Spacer */}
 
           <div className="flex-1" />
 
@@ -325,14 +284,9 @@ const ChatPage = ({ onLeave }) => {
             <p className="text-xs text-gray-500 px-2 mb-3">Appearance</p>
 
             <div
-              className="
-                rounded-xl
-                p-3
-                border
-              "
+              className="rounded-xl p-3 border"
               style={{
                 background: "rgba(255,255,255,0.02)",
-
                 borderColor: theme.border,
               }}
             >
@@ -378,11 +332,7 @@ const ChatPage = ({ onLeave }) => {
           {/* Profile */}
 
           <div
-            className="
-              border-t
-              px-5
-              py-4
-            "
+            className="border-t px-5 py-4"
             style={{
               borderColor: theme.border,
             }}
@@ -402,7 +352,6 @@ const ChatPage = ({ onLeave }) => {
                 style={{
                   background:
                     themeName === "mono" ? "#2a2a2a" : `${theme.accent}30`,
-
                   color: themeName === "mono" ? "#ffffff" : theme.accentHover,
                 }}
               >
@@ -503,9 +452,7 @@ const ChatPage = ({ onLeave }) => {
             </button>
           </header>
 
-          {/* ============================= */}
           {/* Finding stranger */}
-          {/* ============================= */}
 
           {finding ? (
             <div className="flex-1 flex items-center justify-center">
@@ -548,9 +495,7 @@ const ChatPage = ({ onLeave }) => {
                     "
                     style={{
                       borderTopColor: theme.accentHover,
-
                       animationDuration: "1.5s",
-
                       animationDirection: "reverse",
                     }}
                   />
@@ -589,9 +534,7 @@ const ChatPage = ({ onLeave }) => {
             </div>
           ) : (
             <>
-              {/* ============================= */}
               {/* Messages */}
-              {/* ============================= */}
 
               <div
                 className="
@@ -602,8 +545,6 @@ const ChatPage = ({ onLeave }) => {
                 "
               >
                 <div className="max-w-3xl mx-auto">
-                  {/* Welcome */}
-
                   {messages.length === 1 && (
                     <div className="text-center mb-12">
                       <div
@@ -623,7 +564,6 @@ const ChatPage = ({ onLeave }) => {
                             themeName === "mono"
                               ? "#1f1f1f"
                               : `${theme.accent}15`,
-
                           boxShadow:
                             themeName === "mono"
                               ? "0 0 50px rgba(255,255,255,0.025)"
@@ -653,35 +593,32 @@ const ChatPage = ({ onLeave }) => {
                     </div>
                   )}
 
-                  {/* Messages */}
-
                   <div className="space-y-4">
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
                         className={`
-                            flex
-                            ${
-                              msg.sender === "you"
-                                ? "justify-end"
-                                : "justify-start"
-                            }
-                          `}
+                          flex
+                          ${
+                            msg.sender === "you"
+                              ? "justify-end"
+                              : "justify-start"
+                          }
+                        `}
                       >
                         <div
                           className="
-                              max-w-[70%]
-                              px-4
-                              py-3
-                              rounded-2xl
-                              text-sm
-                            "
+                            max-w-[70%]
+                            px-4
+                            py-3
+                            rounded-2xl
+                            text-sm
+                          "
                           style={{
                             background:
                               msg.sender === "you"
                                 ? theme.accent
                                 : theme.bubble,
-
                             color:
                               msg.sender === "you" && themeName === "mono"
                                 ? "#111111"
@@ -692,8 +629,6 @@ const ChatPage = ({ onLeave }) => {
                         </div>
                       </div>
                     ))}
-
-                    {/* Typing */}
 
                     {loading && (
                       <div className="flex justify-start">
@@ -730,9 +665,7 @@ const ChatPage = ({ onLeave }) => {
                 </div>
               </div>
 
-              {/* ============================= */}
               {/* Input */}
-              {/* ============================= */}
 
               <div className="px-7 pb-6">
                 <div className="max-w-3xl mx-auto">
@@ -745,7 +678,6 @@ const ChatPage = ({ onLeave }) => {
                     "
                     style={{
                       background: theme.input,
-
                       borderColor: theme.border,
                     }}
                   >
@@ -757,8 +689,6 @@ const ChatPage = ({ onLeave }) => {
                         if (e.key !== "Enter") {
                           return;
                         }
-
-                        // Double Enter → skip
 
                         if (!input.trim()) {
                           const now = Date.now();
@@ -843,7 +773,6 @@ const ChatPage = ({ onLeave }) => {
                         "
                         style={{
                           background: theme.accent,
-
                           color: themeName === "mono" ? "#111111" : "#ffffff",
                         }}
                       >
@@ -877,9 +806,7 @@ const ChatPage = ({ onLeave }) => {
           )}
         </main>
 
-        {/* ============================= */}
         {/* Skip confirmation */}
-        {/* ============================= */}
 
         {skipConfirm && (
           <div
@@ -904,7 +831,6 @@ const ChatPage = ({ onLeave }) => {
               "
               style={{
                 background: theme.panel,
-
                 borderColor: theme.border,
               }}
             >
@@ -953,7 +879,6 @@ const ChatPage = ({ onLeave }) => {
                   "
                   style={{
                     background: theme.accent,
-
                     color: themeName === "mono" ? "#111111" : "#ffffff",
                   }}
                 >

@@ -1,5 +1,8 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
@@ -39,36 +42,30 @@ Talk casually like a normal person texting.
       },
     ];
 
-    const response = await fetch("http://localhost:11434/api/chat", {
+    const response = await fetch("https://ollama.com/api/chat", {
       method: "POST",
 
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
       },
 
       body: JSON.stringify({
         model: "qwen3:8b",
-
         messages,
-
         think: false,
-
         stream: false,
-
-        keep_alive: -1,
-
         options: {
           temperature: 0.8,
-
           num_predict: 50,
-
           num_ctx: 2048,
         },
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Ollama error: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`Ollama error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
@@ -77,7 +74,7 @@ Talk casually like a normal person texting.
       reply: data.message.content.trim(),
     });
   } catch (error) {
-    console.error(error);
+    console.error("Chat error:", error);
 
     res.status(500).json({
       error: "Failed to get response",
@@ -85,6 +82,8 @@ Talk casually like a normal person texting.
   }
 });
 
-app.listen(3000, () => {
-  console.log("server running");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`rigidX server running on port ${PORT}`);
 });

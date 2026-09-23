@@ -10,7 +10,6 @@ const App = () => {
       const isTyping =
         e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA";
 
-      // "/" → open chat
       if (e.key === "/" && !isTyping) {
         e.preventDefault();
         setChatOpen(true);
@@ -26,10 +25,6 @@ const App = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* ================================= */}
-      {/* Landing background */}
-      {/* ================================= */}
-
       <div
         className={`absolute inset-0 transition-all duration-500 ease-out ${
           chatOpen
@@ -39,10 +34,6 @@ const App = () => {
       >
         <LandingPage onStart={() => setChatOpen(true)} />
       </div>
-
-      {/* ================================= */}
-      {/* Floating chat */}
-      {/* ================================= */}
 
       {chatOpen && <ChatPage onLeave={() => setChatOpen(false)} />}
     </div>

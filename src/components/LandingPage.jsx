@@ -36,26 +36,27 @@ const LandingPage = ({ onStart }) => {
         </div>
 
         {/* Content */}
-        <main className="relative z-10 text-center px-6">
-          <p className="text-[11px] uppercase tracking-[0.28em] text-gray-600 mb-7">
+        <main className="relative z-10 text-center px-5 sm:px-6">
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.22em] sm:tracking-[0.28em] text-gray-600 mb-6 sm:mb-7">
             {wipPage}
           </p>
 
-          <h1 className="text-5xl md:text-7xl font-black tracking-[-0.045em] leading-none">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-[-0.045em] leading-none">
             Work in{" "}
             <span className="font-serif italic font-medium text-gray-400">
               progress.
             </span>
           </h1>
 
-          <p className="mt-6 text-sm text-gray-500">
+          <p className="mt-5 sm:mt-6 text-sm text-gray-500">
             We're still building this part of rigidX.
           </p>
 
           <button
             onClick={closeWip}
             className="
-              mt-9
+              mt-8
+              sm:mt-9
               px-6
               py-3
               rounded-full
@@ -77,8 +78,10 @@ const LandingPage = ({ onStart }) => {
           onClick={closeWip}
           className="
             absolute
-            top-7
-            left-7
+            top-5
+            left-5
+            sm:top-7
+            sm:left-7
             text-xs
             text-gray-500
             hover:text-white
@@ -106,15 +109,16 @@ const LandingPage = ({ onStart }) => {
       <div className="absolute bottom-[-10%] left-[25%] w-[50%] h-[40%] rounded-full bg-[radial-gradient(ellipse,rgba(90,85,230,.65)_0%,rgba(70,45,170,.35)_50%,transparent_75%)] blur-3xl" />
 
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between w-full px-14 py-6">
-        <div className="flex items-center">
+      <header className="relative z-10 flex items-center justify-between w-full px-5 sm:px-8 md:px-14 py-5 sm:py-6">
+        <div className="flex items-center min-w-0">
           <img
             src="/logo.png"
             alt="rigidX"
-            className="w-10 h-10 object-contain"
+            className="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0"
           />
 
-          <nav className="ml-16 flex items-center gap-14 text-[15px] font-semibold tracking-wide">
+          {/* Desktop navigation */}
+          <nav className="hidden sm:flex ml-10 md:ml-16 items-center gap-8 md:gap-14 text-[15px] font-semibold tracking-wide">
             {/* Chat */}
             <button
               onClick={onStart}
@@ -147,14 +151,18 @@ const LandingPage = ({ onStart }) => {
             bg-white
             text-black
             font-semibold
-            text-sm
-            px-7
-            py-3
+            text-xs
+            sm:text-sm
+            px-4
+            sm:px-7
+            py-2.5
+            sm:py-3
             rounded-full
             shadow-md
             hover:bg-white/90
             hover:scale-105
             transition-all
+            whitespace-nowrap
           "
         >
           Start Chatting
@@ -162,12 +170,12 @@ const LandingPage = ({ onStart }) => {
       </header>
 
       {/* Hero */}
-      <main className="relative z-10 flex min-h-[calc(100vh-112px)] flex-col items-center justify-center text-center px-4 -mt-8">
-        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
+      <main className="relative z-10 flex min-h-[calc(100vh-90px)] sm:min-h-[calc(100vh-112px)] flex-col items-center justify-center text-center px-5 -mt-6 sm:-mt-8">
+        <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight mb-4">
           rigidX
         </h1>
 
-        <p className="text-xl md:text-2xl font-semibold italic text-gray-300 tracking-wide mb-8">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold italic text-gray-300 tracking-wide mb-7 sm:mb-8 max-w-[320px] sm:max-w-none">
           Talk freely. Stay anonymous.
         </p>
 
@@ -178,7 +186,8 @@ const LandingPage = ({ onStart }) => {
             text-black
             font-semibold
             text-xs
-            px-7
+            px-6
+            sm:px-7
             py-3
             rounded-full
             shadow-lg
@@ -192,7 +201,7 @@ const LandingPage = ({ onStart }) => {
         </button>
 
         {/* Shortcut */}
-        <div className="mt-6 text-xs text-gray-500 flex items-center gap-2">
+        <div className="mt-5 sm:mt-6 text-xs text-gray-500 flex items-center gap-2">
           <kbd className="px-2 py-1 rounded-md bg-white/10 border border-white/10 text-gray-300">
             /
           </kbd>

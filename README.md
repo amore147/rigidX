@@ -44,32 +44,32 @@ Chat globally, create rooms around shared interests, or talk to an AI assistant.
 
 ## Tech Stack
 
-<p>
-  <img src="https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black" alt="React" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge-Node.js-339933?logo=node.js&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge-Express-000000?logo=express&logoColor=white" alt="Express" />
-  <img src="https://img.shields.io/badge-Socket.IO-010101?logo=socket.io&logoColor=white" alt="Socket.IO" />
-  <img src="https://img.shields.io/badge-MongoDB-47A248?logo=mongodb&logoColor=white" alt="MongoDB" />
-  <img src="https://img.shields.io/badge-Groq-F55036?logo=groq&logoColor=white" alt="Groq" />
-  <img src="https://img.shields.io/badge-Vercel-000000?logo=vercel&logoColor=white" alt="Vercel" />
-  <img src="https://img.shields.io/badge-Render-46E3B7?logo=render&logoColor=black" alt="Render" />
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite&logoColor=646CFF" alt="Vite" />
+  <img src="https://img.shields.io/badge/Node.js-20232A?style=for-the-badge&logo=nodedotjs&logoColor=339933" alt="Node.js" />
+  <img src="https://img.shields.io/badge/Express-20232A?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/Socket.IO-20232A?style=for-the-badge&logo=socketdotio&logoColor=white" alt="Socket.IO" />
+  <img src="https://img.shields.io/badge/MongoDB-20232A?style=for-the-badge&logo=mongodb&logoColor=47A248" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Groq-20232A?style=for-the-badge&logo=groq&logoColor=F55036" alt="Groq" />
+  <img src="https://img.shields.io/badge/Vercel-20232A?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+  <img src="https://img.shields.io/badge/Render-20232A?style=for-the-badge&logo=render&logoColor=46E3B7" alt="Render" />
 </p>
 
-| Technology | Purpose |
-|---|---|
-| React | Frontend UI |
-| Vite | Development server and production builds |
-| Node.js | Backend runtime |
-| Express | REST API |
-| Socket.IO | Real-time messaging and presence |
-| MongoDB | Persistent message, room, and identity data |
-| Mongoose | MongoDB object modeling |
-| Groq API | AI inference |
-| Helmet | HTTP security headers |
-| Express Rate Limit | API request rate limiting |
-| Vercel | Frontend deployment |
-| Render | Backend deployment |
+| Technology         | Purpose                                     |
+| ------------------ | ------------------------------------------- |
+| React              | Frontend UI                                 |
+| Vite               | Development server and production builds    |
+| Node.js            | Backend runtime                             |
+| Express            | REST API                                    |
+| Socket.IO          | Real-time messaging and presence            |
+| MongoDB            | Persistent message, room, and identity data |
+| Mongoose           | MongoDB object modeling                     |
+| Groq API           | AI inference                                |
+| Helmet             | HTTP security headers                       |
+| Express Rate Limit | API request rate limiting                   |
+| Vercel             | Frontend deployment                         |
+| Render             | Backend deployment                          |
 
 ## Project Structure
 
@@ -207,13 +207,13 @@ The health endpoint indicates whether the server is responding. It does not nece
 
 ## Available Scripts
 
-| Command | Description |
-|---|---|
-| `npm run rigidx` | Start the Vite frontend using the custom script |
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Build the frontend for production |
-| `npm run lint` | Run ESLint |
-| `npm run preview` | Preview the production build |
+| Command           | Description                                     |
+| ----------------- | ----------------------------------------------- |
+| `npm run rigidx`  | Start the Vite frontend using the custom script |
+| `npm run dev`     | Start the Vite development server               |
+| `npm run build`   | Build the frontend for production               |
+| `npm run lint`    | Run ESLint                                      |
+| `npm run preview` | Preview the production build                    |
 
 ## Deployment
 
@@ -259,4 +259,3 @@ Contributions, bug reports, and feature suggestions are welcome.
 ## License
 
 No license has been declared yet.
-
